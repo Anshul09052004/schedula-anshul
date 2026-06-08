@@ -3,12 +3,13 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService) {}
+  constructor(private readonly jwtService: JwtService) {}
 
   private users: any[] = [];
 
   signup(user: any) {
     this.users.push(user);
+
     return {
       message: 'User registered successfully',
       user,
@@ -21,16 +22,18 @@ export class AuthService {
     );
 
     if (!user) {
-      return { message: 'Invalid credentials' };
+      return {
+        message: 'Invalid credentials',
+      };
     }
 
-    const token = this.jwtService.sign({
+    const payload = {
       email: user.email,
       role: user.role,
-    });
+    };
 
     return {
-      access_token: token,
+      access_token: this.jwtService.sign(payload),
       role: user.role,
     };
   }

@@ -1,15 +1,22 @@
-import { Controller, Get, Headers, ForbiddenException } from '@nestjs/common';
+import { Controller, Post, Get, Patch, Body } from '@nestjs/common';
+import { DoctorService } from './doctor.service';
 
 @Controller('doctor')
 export class DoctorController {
-  @Get('profile')
-  getDoctorProfile(@Headers('role') role: string) {
-    if (role !== 'DOCTOR') {
-      throw new ForbiddenException('Only Doctor can access');
-    }
+  constructor(private readonly doctorService: DoctorService) { }
 
-    return {
-      message: 'Doctor Profile Accessed',
-    };
+  @Post('profile')
+  createProfile(@Body() body: any) {
+    return this.doctorService.create(body);
+  }
+
+  @Get('profile')
+  getProfile() {
+    return this.doctorService.getProfile();
+  }
+
+  @Patch('profile')
+  updateProfile(@Body() body: any) {
+    return this.doctorService.update(1, body);
   }
 }
