@@ -3,7 +3,7 @@ import { DoctorService } from './doctor.service';
 
 @Controller('doctor')
 export class DoctorController {
-  constructor(private readonly doctorService: DoctorService) {}
+  constructor(private readonly doctorService: DoctorService) { }
 
   @Post('profile')
   createProfile(@Body() body: any) {
@@ -37,8 +37,8 @@ export class DoctorController {
     );
   }
 
-  @Get(':id')
-  getDoctorById(@Param('id') id: string) {
-    return this.doctorService.findOne(Number(id));
-  }
+  // @Get(':id')
+  // getDoctorById(@Param('id') id: string) {
+  //   return this.doctorService.findOne(Number(id));
+  // }
 }

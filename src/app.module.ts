@@ -13,6 +13,10 @@ import { DoctorService } from './doctor/doctor.service';
 import { PatientService } from './patient/patient.service';
 import { Doctor } from './entities/doctor.entity';
 import { Patient } from './entities/patient.entity';
+import { RecurringAvailability } from './entities/recurring-availability.entity';
+import { CustomAvailability } from './entities/custom-availability.entity';
+import { AvailabilityController } from './doctor/availability.controller';
+import { AvailabilityService } from './doctor/availability.service';
 
 @Module({
   imports: [
@@ -24,7 +28,7 @@ import { Patient } from './entities/patient.entity';
       type: 'postgres',
       url: process.env.DATABASE_URL,
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
       ssl: {
         rejectUnauthorized: false,
       },
@@ -36,7 +40,7 @@ import { Patient } from './entities/patient.entity';
         expiresIn: '1d',
       },
     }),
-      TypeOrmModule.forFeature([Doctor, Patient]),
+    TypeOrmModule.forFeature([Doctor, Patient, RecurringAvailability, CustomAvailability]),
   ],
 
   controllers: [
@@ -44,8 +48,9 @@ import { Patient } from './entities/patient.entity';
     AuthController,
     DoctorController,
     PatientController,
+    AvailabilityController,
   ],
 
-  providers: [AppService, AuthService, DoctorService, PatientService],
+  providers: [AppService, AuthService, DoctorService, PatientService, AvailabilityService],
 })
-export class AppModule {}
+export class AppModule { }
