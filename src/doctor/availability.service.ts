@@ -13,7 +13,7 @@ export class AvailabilityService {
 
     @InjectRepository(CustomAvailability)
     private customRepo: Repository<CustomAvailability>,
-  ) {}
+  ) { }
 
   async createRecurring(data: Partial<RecurringAvailability>) {
     if (data.startTime! >= data.endTime!) {
@@ -89,8 +89,40 @@ export class AvailabilityService {
   }
 
   async getByDate(date: string) {
-    return await this.customRepo.find({
+    const parsedDate = new Date(date);
+
+    if (isNaN(parsedDate.getTime())) {
+      return {
+        message: 'Invalid date',
+      };
+    }
+
+    const customAvailability = await this.customRepo.find({
       where: { date },
     });
+
+    if (customAvailability.length > 0) {
+      return customAvailability;
+    }
+
+    // Get weekday name
+    const dayName = parsedDate.toLocaleDateString('en-US', {
+      weekday: 'long',
+    });
+
+
+    const recurringAvailability = await this.recurringRepo.find({
+      where: {
+        dayOfWeek: dayName,
+      },
+    });
+
+    if (recurringAvailability.length > 0) {
+      return recurringAvailability;
+    }
+
+    return {
+      message: 'No availability found',
+    };
   }
 }
