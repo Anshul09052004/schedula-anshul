@@ -1,9 +1,14 @@
 import { Controller, Post, Get, Patch, Body, Param, Query } from '@nestjs/common';
 import { DoctorService } from './doctor.service';
+import { AvailabilityService } from './availability.service';
+
 
 @Controller('doctor')
 export class DoctorController {
-  constructor(private readonly doctorService: DoctorService) { }
+  constructor(
+    private readonly doctorService: DoctorService,
+    private readonly availabilityService: AvailabilityService,
+  ) { }
 
   @Post('profile')
   createProfile(@Body() body: any) {
@@ -34,6 +39,18 @@ export class DoctorController {
       search,
       Number(page),
       Number(limit),
+    );
+  }
+  @Get(':doctorId/slots')
+  getDoctorSlots(
+    @Param('doctorId') doctorId: string,
+    @Query('date') date: string,
+    @Query('duration') duration = '15',
+  ) {
+    return this.availabilityService.getDoctorSlots(
+      Number(doctorId),
+      date,
+      Number(duration),
     );
   }
 

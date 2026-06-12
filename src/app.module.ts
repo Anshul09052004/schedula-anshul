@@ -17,6 +17,8 @@ import { RecurringAvailability } from './entities/recurring-availability.entity'
 import { CustomAvailability } from './entities/custom-availability.entity';
 import { AvailabilityController } from './doctor/availability.controller';
 import { AvailabilityService } from './doctor/availability.service';
+import { BookedSlot } from './entities/booked-slot.entity';
+
 
 @Module({
   imports: [
@@ -40,7 +42,7 @@ import { AvailabilityService } from './doctor/availability.service';
         expiresIn: '1d',
       },
     }),
-    TypeOrmModule.forFeature([Doctor, Patient, RecurringAvailability, CustomAvailability]),
+    TypeOrmModule.forFeature([Doctor, Patient, RecurringAvailability, CustomAvailability, BookedSlot]),
   ],
 
   controllers: [
